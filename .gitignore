@@ -11,10 +11,10 @@
 # Test binary, built with `go test -c`
 *.test
 
-# Output of the go coverage tool, specifically when used with LiteIDE
+# Output of the go coverage tool
 *.out
 
-# Code coverage profiles and other test artifacts
+# Code coverage profiles
 coverage.*
 *.coverprofile
 profile.cov
