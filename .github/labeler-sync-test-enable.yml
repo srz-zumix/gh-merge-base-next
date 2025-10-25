@@ -1,5 +1,0 @@
-sync-test:
-- changed-files:
-  - any-glob-to-any-file:
-    - '**'
-

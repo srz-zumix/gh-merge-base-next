@@ -1,6 +1,3 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -13,8 +10,8 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:     "gh-merge-base-next",
-	Short:   "A tool to find next merge base",
-	Long:    `gh-merge-base-next is a tool to find next merge base.`,
+	Short:   "A tool to find the next commit in a merge base",
+	Long:    `gh-merge-base-next is a tool to find the next commit in a merge base.`,
 	Version: version.Version,
 }
 
