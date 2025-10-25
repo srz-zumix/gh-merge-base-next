@@ -11,8 +11,10 @@
 # Test binary, built with `go test -c`
 *.test
 
-# Code coverage profiles and other test artifacts
+# Output of the go coverage tool
 *.out
+
+# Code coverage profiles
 coverage.*
 *.coverprofile
 profile.cov
@@ -27,6 +29,15 @@ go.work.sum
 # env file
 .env
 
+/gh-merge-base-next
+/gh-merge-base-next.exe
+
+# temp
+[Tt]emp/
+
+# go.work paths
+go-gh-extension
+
 # Editor/IDE
 # .idea/
-# .vscode/
+.vscode/
