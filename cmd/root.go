@@ -7,14 +7,14 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/srz-zumix/gh-label-kit/version"
+	"github.com/srz-zumix/gh-merge-base-next/version"
 	"github.com/srz-zumix/go-gh-extension/pkg/actions"
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "gh-label-kit",
-	Short:   "A tool to manage GitHub labels",
-	Long:    `gh-label-kit is a tool to manage GitHub labels.`,
+	Use:     "gh-merge-base-next",
+	Short:   "A tool to find next merge base",
+	Long:    `gh-merge-base-next is a tool to find next merge base.`,
 	Version: version.Version,
 }
 
