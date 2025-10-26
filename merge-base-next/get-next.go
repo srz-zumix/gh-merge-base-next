@@ -8,8 +8,9 @@ import (
 )
 
 type MergeBaseNext struct {
-	Next  *github.RepositoryCommit
-	Depth int
+	Commit *github.RepositoryCommit `json:"commit,omitempty"`
+	SHA    string                   `json:"sha"`
+	Depth  int                      `json:"depth"`
 }
 
 func (c *Client) GetMergeBaseNext(base string, head string) (MergeBaseNext, error) {
@@ -24,14 +25,19 @@ func (c *Client) GetMergeBaseNext(base string, head string) (MergeBaseNext, erro
 	}
 	headRepositoryCommit, err := findCommit(commitsComparison, headCommit.GetSHA())
 	if err != nil {
-		return MergeBaseNext{}, err
+		return MergeBaseNext{
+			Commit: nil,
+			SHA:    "",
+			Depth:  0,
+		}, nil
 	}
 
 	nextCommit, depth := walkToFirstParent(commitsComparison, headRepositoryCommit, 1)
 
 	return MergeBaseNext{
-		Next:  nextCommit,
-		Depth: depth,
+		Commit: nextCommit,
+		SHA:    nextCommit.GetSHA(),
+		Depth:  depth,
 	}, nil
 }
 

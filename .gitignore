@@ -41,3 +41,6 @@ go-gh-extension
 # Editor/IDE
 # .idea/
 .vscode/
+testdata/
+test-spec/
+TEST_PLAN.md

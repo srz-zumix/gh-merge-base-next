@@ -67,6 +67,9 @@ func RunMergeBaseNext(cmd *cobra.Command, base string, head string) error {
 		renderer.RenderExportedData(result)
 		return nil
 	}
-	cmd.Println(result.Next.GetSHA())
+	if result.Commit == nil {
+		return nil
+	}
+	cmd.Println(result.Commit.GetSHA())
 	return nil
 }

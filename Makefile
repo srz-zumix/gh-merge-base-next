@@ -13,13 +13,22 @@ install-released:
 	gh extension remove "${EXTENSION_NAME}" || :
 	gh extension install "srz-zumix/gh-${EXTENSION_NAME}"
 
-build:
+build: ## build the binary
 	go build -o gh-${EXTENSION_NAME}
 
-test: ## run tests
+test: ## run all tests
 	go test -v ./...
 
-clean:
+test-integration: build ## run integration tests
+	go test -v ./integration_test/...
+
+test-coverage: ## run tests with coverage
+	go test -coverprofile=coverage.out ./...
+	go tool cover -html=coverage.out -o coverage.html
+
+clean: ## clean build artifacts and test files
+	rm -f gh-${EXTENSION_NAME}
+	rm -f coverage.out coverage.html
 	rm -f go.work
 
 go-work:
