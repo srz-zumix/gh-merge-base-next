@@ -13,19 +13,19 @@ type MergeBaseNext struct {
 	Depth  int                      `json:"depth"`
 }
 
-func (c *Client) GetMergeBaseNext(base string, head string) (MergeBaseNext, error) {
+func (c *Client) GetMergeBaseNext(base string, head string) (*MergeBaseNext, error) {
 	commitsComparison, err := gh.CompareCommits(c.ctx, c.client, c.repo, base, head)
 	if err != nil {
-		return MergeBaseNext{}, err
+		return nil, err
 	}
 
 	headCommit, err := gh.GetCommit(c.ctx, c.client, c.repo, head)
 	if err != nil {
-		return MergeBaseNext{}, err
+		return nil, err
 	}
 	headRepositoryCommit, err := findCommit(commitsComparison, headCommit.GetSHA())
 	if err != nil {
-		return MergeBaseNext{
+		return &MergeBaseNext{
 			Commit: nil,
 			SHA:    "",
 			Depth:  0,
@@ -34,7 +34,7 @@ func (c *Client) GetMergeBaseNext(base string, head string) (MergeBaseNext, erro
 
 	nextCommit, depth := walkToFirstParent(commitsComparison, headRepositoryCommit, 1)
 
-	return MergeBaseNext{
+	return &MergeBaseNext{
 		Commit: nextCommit,
 		SHA:    nextCommit.GetSHA(),
 		Depth:  depth,

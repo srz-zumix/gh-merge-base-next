@@ -20,95 +20,49 @@ package integrationtest
 */
 
 import (
-	"fmt"
-	"strings"
 	"testing"
 )
 
 // TestSimpleMerge tests the simple merge scenarios with commit hash and depth validation
 func TestSimpleMerge(t *testing.T) {
-	helper := NewTestHelper(t)
-	helper.BuildBinary(t)
-
-	testCases := []struct {
-		name     string
-		base     string
-		head     string
-		walkTo   string
-		expected string
-		depth    int
-		desc     string
-	}{
+	testCases := []TestCase{
 		{
-			name:     "FindNextFromMergeBaseToMain",
-			base:     "cdddb51",
-			head:     "testdata/simple-merge/main",
-			walkTo:   "head",
-			expected: "0eb5947",
-			depth:    1,
-			desc:     "Find next commit from merge-base (A: Initial commit) to main branch",
+			Name:  "FindNextFromMergeBaseToMain",
+			Base:  "cdddb51",
+			Head:  "testdata/simple-merge/main",
+			SHA:   "0eb59474ced5e6cd338c9ef1406acb4b4522d9fc",
+			Depth: 1,
+			Desc:  "Find next commit from merge-base (A: Initial commit) to main branch",
 		},
 		{
-			name:     "FindNextFromMergeBaseToFeature",
-			base:     "cdddb51",
-			head:     "testdata/simple-merge/feature",
-			walkTo:   "head",
-			expected: "d761e77",
-			depth:    2,
-			desc:     "Find next commit from merge-base (A: Initial commit) to feature branch",
+			Name:  "FindNextFromMergeBaseToFeature",
+			Base:  "cdddb51",
+			Head:  "testdata/simple-merge/feature",
+			SHA:   "d761e77fe7bbc5fd65e8ee14b8a65ea2ff1f0043",
+			Depth: 2,
+			Desc:  "Find next commit from merge-base (A: Initial commit) to feature branch",
 		},
 		{
-			name:     "AutoDetectMergeBaseWalkToHead",
-			base:     "testdata/simple-merge/main",
-			head:     "testdata/simple-merge/feature",
-			walkTo:   "head",
-			expected: "d761e77",
-			depth:    2,
-			desc:     "Auto-detect merge-base between main and feature, walk to head (feature)",
+			Name:  "AutoDetectMergeBaseWalkToHead",
+			Base:  "testdata/simple-merge/main",
+			Head:  "testdata/simple-merge/feature",
+			SHA:   "d761e77fe7bbc5fd65e8ee14b8a65ea2ff1f0043",
+			Depth: 2,
+			Desc:  "Auto-detect merge-base between main and feature, walk to feature",
 		},
 		{
-			name:     "AutoDetectMergeBaseWalkToBase",
-			base:     "testdata/simple-merge/main",
-			head:     "testdata/simple-merge/feature",
-			walkTo:   "base",
-			expected: "0eb5947",
-			depth:    1,
-			desc:     "Auto-detect merge-base between main and feature, walk to base (main)",
+			Name:  "AutoDetectMergeBaseWalkToBase",
+			Base:  "testdata/simple-merge/feature",
+			Head:  "testdata/simple-merge/main",
+			SHA:   "0eb59474ced5e6cd338c9ef1406acb4b4522d9fc",
+			Depth: 1,
+			Desc:  "Auto-detect merge-base between main and feature, walk to main",
 		},
 	}
 
 	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Logf("Testing: %s", tc.desc)
-
-			// Prepare command arguments with template to get depth
-			args := []string{tc.base, tc.head, "--walk-to", tc.walkTo, "--format", "json", "--template", "{{.commit.sha}} depth:{{.depth}}"}
-
-			// Execute command
-			stdout, stderr, err := helper.RunCommand(t, args...)
-
-			if err != nil {
-				t.Errorf("Command failed: %v\nArgs: %v\nStdout: %s\nStderr: %s", err, args, stdout, stderr)
-				return
-			}
-
-			// Check the result
-			result := strings.TrimSpace(stdout)
-			if result == "" {
-				result = strings.TrimSpace(stderr)
-			}
-
-			// Verify the expected commit hash is in the output
-			if !strings.Contains(result, tc.expected) {
-				t.Errorf("Expected commit hash '%s' not found in output: %s", tc.expected, result)
-			}
-
-			// Verify the expected depth is in the output
-			if !strings.Contains(result, fmt.Sprintf("depth:%d", tc.depth)) {
-				t.Errorf("Expected depth '%d' not found in output: %s", tc.depth, result)
-			}
-
-			t.Logf("Success - Expected: %s depth:%d, Got: %s", tc.expected, tc.depth, result)
+		t.Run(tc.Name, func(t *testing.T) {
+			tc.Run(t)
 		})
 	}
 }

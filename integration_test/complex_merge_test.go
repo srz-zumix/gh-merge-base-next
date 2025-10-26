@@ -30,149 +30,97 @@ package integrationtest
 */
 
 import (
-	"fmt"
-	"strings"
 	"testing"
 )
 
 // TestComplexMerge tests complex merge scenarios with multiple branches, merge commits, and depth validation
 func TestComplexMerge(t *testing.T) {
-	helper := NewTestHelper(t)
-	helper.BuildBinary(t)
-
-	testCases := []struct {
-		name     string
-		base     string
-		head     string
-		walkTo   string
-		expected string
-		depth    int
-		desc     string
-	}{
+	testCases := []TestCase{
 		{
-			name:     "FindNextFromMergeBaseToMain",
-			base:     "00506e8",
-			head:     "testdata/complex-merge/main",
-			walkTo:   "head",
-			expected: "8aa27fa",
-			depth:    3,
-			desc:     "Find next commit from merge-base (A: Initial commit) to main branch with merge commits",
+			Name:  "FindNextFromMergeBaseToMain",
+			Base:  "00506e8",
+			Head:  "testdata/complex-merge/main",
+			SHA:   "8aa27fa091aa909e06c42dd61c83c1395f034fb8",
+			Depth: 3,
+			Desc:  "Find next commit from merge-base (A: Initial commit) to main branch with merge commits",
 		},
 		{
-			name:     "FindNextFromMergeBaseToFeature2",
-			base:     "00506e8",
-			head:     "testdata/complex-merge/feature2",
-			walkTo:   "head",
-			expected: "8bea32a",
-			depth:    2,
-			desc:     "Find next commit from merge-base (A: Initial commit) to feature2 branch",
+			Name:  "FindNextFromMergeBaseToFeature2",
+			Base:  "00506e8",
+			Head:  "testdata/complex-merge/feature2",
+			SHA:   "8bea32a6b9ff20cbfe949e5e8f82ddbf84197ad1",
+			Depth: 2,
+			Desc:  "Find next commit from merge-base (A: Initial commit) to feature2 branch",
 		},
 		{
-			name:     "AutoDetectMergeBaseMainToFeature2WalkToHead",
-			base:     "testdata/complex-merge/main",
-			head:     "testdata/complex-merge/feature2",
-			walkTo:   "head",
-			expected: "8bea32a",
-			depth:    2,
-			desc:     "Auto-detect merge-base between main and feature2, walk to feature2 (head)",
+			Name:  "AutoDetectMergeBaseMainToFeature2WalkToHead",
+			Base:  "testdata/complex-merge/main",
+			Head:  "testdata/complex-merge/feature2",
+			SHA:   "8bea32a6b9ff20cbfe949e5e8f82ddbf84197ad1",
+			Depth: 2,
+			Desc:  "Auto-detect merge-base between main and feature2, walk to feature2",
 		},
 		{
-			name:     "AutoDetectMergeBaseMainToFeature2WalkToBase",
-			base:     "testdata/complex-merge/main",
-			head:     "testdata/complex-merge/feature2",
-			walkTo:   "base",
-			expected: "8aa27fa",
-			depth:    3,
-			desc:     "Auto-detect merge-base between main and feature2, walk to main (base)",
+			Name:  "AutoDetectMergeBaseMainToFeature2WalkToBase",
+			Base:  "testdata/complex-merge/feature2",
+			Head:  "testdata/complex-merge/main",
+			SHA:   "8aa27fa091aa909e06c42dd61c83c1395f034fb8",
+			Depth: 3,
+			Desc:  "Auto-detect merge-base between main and feature2, walk to main",
 		},
 		{
-			name:     "FindNextAfterMergeCommit",
-			base:     "12898c7",
-			head:     "testdata/complex-merge/main",
-			walkTo:   "head",
-			expected: "b1f8984",
-			depth:    1,
-			desc:     "Find next commit after merge commit (E: Merge feature1 into main) to main",
+			Name:  "FindNextAfterMergeCommit",
+			Base:  "12898c7",
+			Head:  "testdata/complex-merge/main",
+			SHA:   "b1f8984e815df71ba66cbbbbe7559365d0c82d4f",
+			Depth: 1,
+			Desc:  "Find next commit after merge commit (E: Merge feature1 into main) to main",
 		},
 		{
-			name:     "FindNextFromMergeBaseToFeature1",
-			base:     "00506e8",
-			head:     "testdata/complex-merge/feature1",
-			walkTo:   "head",
-			expected: "75ff397",
-			depth:    1,
-			desc:     "Find next commit from merge-base (A: Initial commit) to feature1 branch",
+			Name:  "FindNextFromMergeBaseToFeature1",
+			Base:  "00506e8",
+			Head:  "testdata/complex-merge/feature1",
+			SHA:   "75ff397267f653296190ade85624b664920353b4",
+			Depth: 1,
+			Desc:  "Find next commit from merge-base (A: Initial commit) to feature1 branch",
 		},
 		{
-			name:     "AutoDetectMergeBaseMainToFeature1WalkToHead",
-			base:     "testdata/complex-merge/main",
-			head:     "testdata/complex-merge/feature1",
-			walkTo:   "head",
-			expected: "<no value>",
-			depth:    0,
-			desc:     "Auto-detect merge-base between main and feature1, walk to feature1 (head)",
+			Name:  "AutoDetectMergeBaseMainToFeature1WalkToHead",
+			Base:  "testdata/complex-merge/main",
+			Head:  "testdata/complex-merge/feature1",
+			SHA:   "",
+			Depth: 0,
+			Desc:  "Auto-detect merge-base between main and feature1, walk to feature1 (head)",
 		},
 		{
-			name:     "AutoDetectMergeBaseMainToFeature1WalkToBase",
-			base:     "testdata/complex-merge/main",
-			head:     "testdata/complex-merge/feature1",
-			walkTo:   "base",
-			expected: "8aa27fa",
-			depth:    3,
-			desc:     "Auto-detect merge-base between main and feature1, walk to main (base)",
+			Name:  "AutoDetectMergeBaseMainToFeature1WalkToBase",
+			Base:  "testdata/complex-merge/feature1",
+			Head:  "testdata/complex-merge/main",
+			SHA:   "8aa27fa091aa909e06c42dd61c83c1395f034fb8",
+			Depth: 3,
+			Desc:  "Auto-detect merge-base between main and feature1, walk to main (base)",
 		},
 		{
-			name:     "AutoDetectMergeBaseFeature2ToFeature1WalkToHead",
-			base:     "testdata/complex-merge/feature2",
-			head:     "testdata/complex-merge/feature1",
-			walkTo:   "head",
-			expected: "75ff397",
-			depth:    1,
-			desc:     "Auto-detect merge-base between feature2 and feature1, walk to feature1 (head)",
+			Name:  "AutoDetectMergeBaseFeature2ToFeature1WalkToHead",
+			Base:  "testdata/complex-merge/feature2",
+			Head:  "testdata/complex-merge/feature1",
+			SHA:   "75ff397267f653296190ade85624b664920353b4",
+			Depth: 1,
+			Desc:  "Auto-detect merge-base between feature2 and feature1, walk to feature1 (head)",
 		},
 		{
-			name:     "AutoDetectMergeBaseFeature2ToFeature1WalkToBase",
-			base:     "testdata/complex-merge/feature2",
-			head:     "testdata/complex-merge/feature1",
-			walkTo:   "base",
-			expected: "8bea32a",
-			depth:    2,
-			desc:     "Auto-detect merge-base between feature2 and feature1, walk to feature2 (base)",
+			Name:  "AutoDetectMergeBaseFeature2ToFeature1WalkToBase",
+			Base:  "testdata/complex-merge/feature1",
+			Head:  "testdata/complex-merge/feature2",
+			SHA:   "8bea32a6b9ff20cbfe949e5e8f82ddbf84197ad1",
+			Depth: 2,
+			Desc:  "Auto-detect merge-base between feature2 and feature1, walk to feature2 (base)",
 		},
 	}
 
 	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Logf("Testing: %s", tc.desc)
-
-			// Prepare command arguments with template to get depth
-			args := []string{tc.base, tc.head, "--walk-to", tc.walkTo, "--format", "json", "--template", "{{.commit.sha}} depth:{{.depth}}"}
-
-			// Execute command
-			stdout, stderr, err := helper.RunCommand(t, args...)
-
-			if err != nil {
-				t.Errorf("Command failed: %v\nArgs: %v\nStdout: %s\nStderr: %s", err, args, stdout, stderr)
-				return
-			}
-
-			// Check the result
-			result := strings.TrimSpace(stdout)
-			if result == "" {
-				result = strings.TrimSpace(stderr)
-			}
-
-			// Verify the expected commit hash is in the output
-			if !strings.Contains(result, tc.expected) {
-				t.Errorf("Expected commit hash '%s' not found in output: %s", tc.expected, result)
-			}
-
-			// Verify the expected depth is in the output
-			if !strings.Contains(result, fmt.Sprintf("depth:%d", tc.depth)) {
-				t.Errorf("Expected depth '%d' not found in output: %s", tc.depth, result)
-			}
-
-			t.Logf("Success - Expected: %s depth:%d, Got: %s", tc.expected, tc.depth, result)
+		t.Run(tc.Name, func(t *testing.T) {
+			tc.Run(t)
 		})
 	}
 }
