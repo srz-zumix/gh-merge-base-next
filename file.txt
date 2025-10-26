@@ -1,3 +1,6 @@
 Initial file for commit A
-Branch B initial work
+Branch A initial work
+Common work on path A
+Branch B initial work  
 Common work on path B
+Merged content from both branches
