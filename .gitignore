@@ -16,6 +16,8 @@
 
 # Code coverage profiles
 coverage.*
+unit-coverage.out
+integration-coverage.out
 *.coverprofile
 profile.cov
 

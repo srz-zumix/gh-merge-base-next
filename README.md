@@ -24,6 +24,12 @@ make test-integration-report
 
 # Run all tests with comprehensive reporting
 make test-all-report
+
+# Merge coverage profiles from unit and integration tests
+make merge-coverage
+
+# Run octocov locally (requires octocov installation)
+make octocov-local
 ```
 
 ### Test Reports
