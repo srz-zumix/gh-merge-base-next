@@ -78,7 +78,7 @@ require (
 )
 
 require (
-	github.com/cli/cli/v2 v2.81.0
+	github.com/cli/cli/v2 v2.82.0
 	github.com/cli/go-gh/v2 v2.12.2
 	github.com/google/go-github/v73 v73.0.0
 	github.com/spf13/cobra v1.10.1
