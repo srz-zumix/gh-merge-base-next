@@ -1,4 +1,4 @@
-package integrationtest
+package mergebasenext
 
 /*
 ## Multiple Merge Base Commit Graph

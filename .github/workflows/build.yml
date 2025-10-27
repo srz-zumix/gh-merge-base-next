@@ -36,24 +36,11 @@ jobs:
       - name: Install test dependencies
         run: go install github.com/jstemmer/go-junit-report/v2@latest
 
-      - name: Run unit tests with coverage
+      - name: Run all tests with coverage
         run: |
           mkdir -p test-results
-          go test -v -race -coverprofile=unit-coverage.out -covermode=atomic ./cmd/ ./merge-base-next/ ./version/ 2>&1 | tee test-output.txt
+          go test -v -race -coverprofile=coverage.out -covermode=atomic ./... 2>&1 | tee test-output.txt
           go-junit-report -in test-output.txt -out test-results/junit.xml
-
-      - name: Run integration tests with coverage
-        run: |
-          go test -v -race -coverprofile=integration-coverage.out -covermode=atomic -coverpkg=./cmd/...,./merge-base-next/...,./version/... ./integration_test/... 2>&1 | tee integration-test-output.txt || true
-          go-junit-report -in integration-test-output.txt -out test-results/integration-junit.xml
-
-      - name: Merge coverage profiles
-        run: |
-          # Install gocovmerge if not available
-          go install github.com/wadey/gocovmerge@latest
-          # Merge coverage profiles
-          gocovmerge unit-coverage.out integration-coverage.out > coverage.out
-          # Generate HTML coverage report
           go tool cover -html=coverage.out -o test-results/coverage.html
 
       - name: Upload test results
@@ -90,4 +77,3 @@ jobs:
           echo "### Test Artifacts 📁" >> $GITHUB_STEP_SUMMARY
           echo "- Coverage Report: \`test-results/coverage.html\`" >> $GITHUB_STEP_SUMMARY
           echo "- JUnit Report: \`test-results/junit.xml\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Integration Tests: \`test-results/integration-junit.xml\`" >> $GITHUB_STEP_SUMMARY

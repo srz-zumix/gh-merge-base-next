@@ -19,14 +19,11 @@ make test-coverage
 # Run tests with JUnit report generation
 make test-report
 
-# Run integration tests with JUnit report
-make test-integration-report
+# Run all unit tests with comprehensive reporting (including merge-base-next package)
+make test-unit-all
 
 # Run all tests with comprehensive reporting
 make test-all-report
-
-# Merge coverage profiles from unit and integration tests
-make merge-coverage
 
 # Run octocov locally (requires octocov installation)
 make octocov-local
@@ -36,9 +33,10 @@ make octocov-local
 
 The project generates comprehensive test reports in the `test-results/` directory:
 
-- **JUnit XML Reports**: `junit.xml` and `integration-junit.xml` for CI/CD integration
+- **JUnit XML Reports**: `junit.xml` for CI/CD integration
 - **Coverage Reports**: HTML format coverage report (`coverage.html`)
-- **Octocov Reports**: Coverage reporting via Octocov with badge generation
+- **Octocov Reports**: Coverage reporting via Octocov with badge generation  
+- **Unit Tests**: All tests are now properly organized as unit tests within respective packages
 - **Test Artifacts**: Uploaded to GitHub Actions for PR reviews
 
 Test reports are automatically generated in CI/CD and can be viewed in:

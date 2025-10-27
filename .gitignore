@@ -16,15 +16,12 @@
 
 # Code coverage profiles
 coverage.*
-unit-coverage.out
-integration-coverage.out
 *.coverprofile
 profile.cov
 
 # Test reports
 test-results/
 test-output.txt
-integration-test-output.txt
 
 # Octocov reports
 .octocov/

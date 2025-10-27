@@ -19,9 +19,6 @@ build: ## build the binary
 test: ## run all tests
 	go test -v ./...
 
-test-integration: build ## run integration tests
-	go test -v ./integration_test/...
-
 test-coverage: ## run tests with coverage
 	go test -coverprofile=coverage.out ./...
 	go tool cover -html=coverage.out -o coverage.html
@@ -29,42 +26,10 @@ test-coverage: ## run tests with coverage
 test-report: ## run tests with JUnit report generation
 	@command -v go-junit-report >/dev/null 2>&1 || go install github.com/jstemmer/go-junit-report/v2@latest
 	mkdir -p test-results
-	go test -v -coverprofile=unit-coverage.out -covermode=atomic ./cmd/ ./merge-base-next/ ./version/ 2>&1 | tee test-output.txt
+	go test -v -coverprofile=coverage.out -covermode=atomic ./... 2>&1 | tee test-output.txt
 	go-junit-report -in test-output.txt -out test-results/junit.xml
-	go tool cover -html=unit-coverage.out -o test-results/unit-coverage.html
+	go tool cover -html=coverage.out -o test-results/coverage.html
 	@echo "Unit test report generated in test-results/"
-
-test-integration-report: build ## run integration tests with JUnit report
-	@command -v go-junit-report >/dev/null 2>&1 || go install github.com/jstemmer/go-junit-report/v2@latest
-	mkdir -p test-results
-	go test -v -coverprofile=integration-coverage.out -covermode=atomic -coverpkg=./cmd/...,./merge-base-next/...,./version/... ./integration_test/... 2>&1 | tee integration-test-output.txt || true
-	go-junit-report -in integration-test-output.txt -out test-results/integration-junit.xml
-	go tool cover -html=integration-coverage.out -o test-results/integration-coverage.html
-	@echo "Integration test report generated in test-results/"
-
-test-all-report: ## run all tests with comprehensive reporting
-	@$(MAKE) test-report
-	@$(MAKE) test-integration-report
-	@$(MAKE) merge-coverage
-	@echo "All test reports generated in test-results/"
-
-merge-coverage: ## merge unit and integration test coverage
-	@command -v gocovmerge >/dev/null 2>&1 || go install github.com/wadey/gocovmerge@latest
-	@if [ -f unit-coverage.out ] && [ -f integration-coverage.out ]; then \
-		gocovmerge unit-coverage.out integration-coverage.out > coverage.out; \
-		go tool cover -html=coverage.out -o test-results/coverage.html; \
-		echo "Coverage profiles merged into coverage.out"; \
-	elif [ -f unit-coverage.out ]; then \
-		cp unit-coverage.out coverage.out; \
-		go tool cover -html=coverage.out -o test-results/coverage.html; \
-		echo "Using unit coverage only"; \
-	elif [ -f integration-coverage.out ]; then \
-		cp integration-coverage.out coverage.out; \
-		go tool cover -html=coverage.out -o test-results/coverage.html; \
-		echo "Using integration coverage only"; \
-	else \
-		echo "No coverage files found"; \
-	fi
 
 octocov-local: ## run octocov locally (requires octocov to be installed)
 	@command -v octocov >/dev/null 2>&1 || (echo "octocov is not installed. Install with: go install github.com/k1LoW/octocov@latest" && exit 1)
@@ -72,8 +37,8 @@ octocov-local: ## run octocov locally (requires octocov to be installed)
 
 clean: ## clean build artifacts and test files
 	rm -f gh-${EXTENSION_NAME}
-	rm -f coverage.out unit-coverage.out integration-coverage.out coverage.html
-	rm -f test-output.txt integration-test-output.txt
+	rm -f coverage.out coverage.html
+	rm -f test-output.txt
 	rm -rf test-results/
 	rm -f go.work
 
