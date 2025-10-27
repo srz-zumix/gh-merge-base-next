@@ -51,11 +51,11 @@ jobs:
           path: test-results/
 
       - name: Run Octocov
-        uses: k1LoW/octocov-action@v1
+        uses: k1LoW/octocov-action@73d561f65d59e66899ed5c87e4621a913b5d5c20 # v1.5.0
         if: success() || failure()
 
       - name: Publish test results
-        uses: dorny/test-reporter@v1.9.1
+        uses: dorny/test-reporter@dc3a92680fcc15842eef52e8c4606ea7ce6bd3f3 # v2.1.1
         if: success() || failure()
         with:
           name: Go Tests Results
