@@ -19,6 +19,15 @@ coverage.*
 *.coverprofile
 profile.cov
 
+# Test reports
+test-results/
+test-output.txt
+integration-test-output.txt
+
+# Octocov reports
+.octocov/
+docs/coverage.svg
+
 # Dependency directories (remove the comment below to include it)
 # vendor/
 

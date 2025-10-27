@@ -1,0 +1,30 @@
+# Octocov configuration for test coverage reporting
+# https://github.com/k1LoW/octocov
+
+coverage:
+  paths:
+    - coverage.out
+  # acceptable: 80%   # Minimum acceptable coverage
+  badge:
+    path: docs/coverage.svg
+
+codeToTestRatio:
+  code:
+    - '**/*.go'
+    - '!**/*_test.go'
+  test:
+    - '**/*_test.go'
+  acceptable: 1:1.2
+
+testExecutionTime:
+  acceptable: 5min
+
+diff:
+  datastores:
+    - artifact://${GITHUB_REPOSITORY}
+comment:
+  if: is_pull_request
+report:
+  if: is_default_branch
+  datastores:
+    - artifact://${GITHUB_REPOSITORY}

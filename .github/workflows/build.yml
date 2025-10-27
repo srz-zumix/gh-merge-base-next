@@ -1,12 +1,17 @@
 name: Build and Test
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
 
 jobs:
   build:
     permissions:
       contents: read
+      checks: write
+      pull-requests: write
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -28,5 +33,52 @@ jobs:
       - name: Build
         run: go build ./...
 
-      - name: Run tests
-        run: go test ./...
+      - name: Install test dependencies
+        run: go install github.com/jstemmer/go-junit-report/v2@latest
+
+      - name: Run unit tests with coverage
+        run: |
+          mkdir -p test-results
+          go test -v -race -coverprofile=coverage.out -covermode=atomic ./... | tee test-output.txt
+          go-junit-report -in test-output.txt -out test-results/junit.xml
+
+      - name: Run integration tests
+        run: |
+          go test -v ./integration_test/... 2>&1 | tee integration-test-output.txt || true
+          go-junit-report -in integration-test-output.txt -out test-results/integration-junit.xml
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v5
+        if: success() || failure()
+        with:
+          name: test-results
+          path: test-results/
+
+      - name: Run Octocov
+        uses: k1LoW/octocov-action@v1
+        if: success() || failure()
+
+      - name: Publish test results
+        uses: dorny/test-reporter@v1.9.1
+        if: success() || failure()
+        with:
+          name: Go Tests Results
+          path: 'test-results/*.xml'
+          reporter: java-junit
+          fail-on-error: false
+
+      - name: Generate test summary
+        if: success() || failure()
+        run: |
+          echo "## Test Results 📊" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f coverage.out ]; then
+            coverage=$(go tool cover -func=coverage.out | tail -1 | awk '{print $3}')
+            echo "**Coverage**: $coverage" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "### Test Artifacts 📁" >> $GITHUB_STEP_SUMMARY
+          echo "- Coverage Report: \`test-results/coverage.html\`" >> $GITHUB_STEP_SUMMARY
+          echo "- JUnit Report: \`test-results/junit.xml\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Integration Tests: \`test-results/integration-junit.xml\`" >> $GITHUB_STEP_SUMMARY
