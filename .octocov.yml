@@ -5,8 +5,8 @@ coverage:
   paths:
     - coverage.out
   # acceptable: 80%   # Minimum acceptable coverage
-  badge:
-    path: docs/coverage.svg
+  # badge:
+  #   path: docs/coverage.svg
 
 codeToTestRatio:
   code:

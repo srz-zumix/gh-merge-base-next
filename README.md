@@ -1,7 +1,6 @@
 # gh-merge-base-next
 
 [![Build and Test](https://github.com/srz-zumix/gh-merge-base-next/actions/workflows/build.yml/badge.svg)](https://github.com/srz-zumix/gh-merge-base-next/actions/workflows/build.yml)
-[![octocov](https://raw.githubusercontent.com/srz-zumix/gh-merge-base-next/main/docs/coverage.svg)](https://github.com/srz-zumix/gh-merge-base-next/actions)
 
 gh-merge-base-next is a tool to find the next commit in a merge base.
 
@@ -18,15 +17,6 @@ make test-coverage
 
 # Run tests with JUnit report generation
 make test-report
-
-# Run all unit tests with comprehensive reporting (including merge-base-next package)
-make test-unit-all
-
-# Run all tests with comprehensive reporting
-make test-all-report
-
-# Run octocov locally (requires octocov installation)
-make octocov-local
 ```
 
 ### Test Reports
