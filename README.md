@@ -2,7 +2,7 @@
 
 [![Build and Test](https://github.com/srz-zumix/gh-merge-base-next/actions/workflows/build.yml/badge.svg)](https://github.com/srz-zumix/gh-merge-base-next/actions/workflows/build.yml)
 
-gh-merge-base-next is a tool to find the next commit in a merge base.
+gh-merge-base-next is a tool to find the next commit on first-parent path from merge-base.
 
 ## Installation
 
