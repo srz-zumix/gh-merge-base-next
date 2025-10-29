@@ -1,20 +1,19 @@
-name: "Pull Request Labeler"
+name: Labeler
 on:
-- pull_request
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      pr-number:
+        description: 'The pull request number(s)'
+        required: true
 
 jobs:
   labeler:
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: write
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
-    - uses: actions/labeler@v6
-      id: labeler
-      with:
-        sync-labels: true
-    - env:
-        ALL_LABELS: ${{ steps.labeler.outputs.all-labels }}
-      run: |
-        echo "Labels: ${ALL_LABELS}"
+      - uses: srz-zumix/labeler-action@5883520a32fbbea61d20ded8fd2e272eedfe3ca9 # v0.4.4
+        with:
+          pr-number: ${{ github.event.inputs.pr-number || github.event.number }}
