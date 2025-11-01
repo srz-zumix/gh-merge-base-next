@@ -10,6 +10,10 @@ gh-merge-base-next is a tool to find the next commit on first-parent path from m
 gh extension install srz-zumix/gh-merge-base-next
 ```
 
+## GitHub Actions
+
+[srz-zumix/merge-base-next-action](https://github.com/srz-zumix/merge-base-next-action)
+
 ## Features
 
 ### Core Functionality
