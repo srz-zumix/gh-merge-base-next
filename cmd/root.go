@@ -5,7 +5,7 @@ import (
 
 	"github.com/cli/cli/v2/pkg/cmdutil"
 	"github.com/spf13/cobra"
-	mergebasenext "github.com/srz-zumix/gh-merge-base-next/merge-base-next"
+	"github.com/srz-zumix/gh-merge-base-next/pkg/mergebasenext"
 	"github.com/srz-zumix/gh-merge-base-next/version"
 	"github.com/srz-zumix/go-gh-extension/pkg/actions"
 	"github.com/srz-zumix/go-gh-extension/pkg/render"
