@@ -2,7 +2,7 @@ module github.com/srz-zumix/gh-merge-base-next
 
 go 1.24.2
 
-require github.com/srz-zumix/go-gh-extension v0.1.24
+require github.com/srz-zumix/go-gh-extension v0.1.27
 
 require (
 	dario.cat/mergo v1.0.2 // indirect
