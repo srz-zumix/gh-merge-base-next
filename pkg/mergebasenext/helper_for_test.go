@@ -1,6 +1,7 @@
 package mergebasenext
 
 import (
+	"context"
 	"strings"
 	"testing"
 )
@@ -13,7 +14,7 @@ func getTestClient(t *testing.T) *Client {
 	if testClient != nil {
 		return testClient
 	}
-	c, err := NewClient(testRepository)
+	c, err := NewClient(context.Background(), testRepository)
 	if err != nil {
 		t.Fatalf("Failed to create mergebasenext client: %v", err)
 	}
