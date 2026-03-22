@@ -53,7 +53,7 @@ func init() {
 }
 
 func RunMergeBaseNext(cmd *cobra.Command, base string, head string) error {
-	client, err := mergebasenext.NewClient(opts.Repo)
+	client, err := mergebasenext.NewClient(cmd.Context(), opts.Repo)
 	if err != nil {
 		return err
 	}
@@ -64,8 +64,7 @@ func RunMergeBaseNext(cmd *cobra.Command, base string, head string) error {
 
 	renderer := render.NewRenderer(opts.Exporter)
 	if opts.Exporter != nil {
-		renderer.RenderExportedData(result)
-		return nil
+		return renderer.RenderExportedData(result)
 	}
 	if result.Commit == nil {
 		return nil

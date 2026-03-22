@@ -15,13 +15,12 @@ type Client struct {
 	repo   repository.Repository
 }
 
-func NewClient(repo string) (*Client, error) {
+func NewClient(ctx context.Context, repo string) (*Client, error) {
 	repository, err := parser.Repository(parser.RepositoryInput(repo))
 	if err != nil {
 		return nil, fmt.Errorf("error parsing repository: %w", err)
 	}
 
-	ctx := context.Background()
 	client, err := gh.NewGitHubClientWithRepo(repository)
 	if err != nil {
 		return nil, fmt.Errorf("error creating GitHub client: %w", err)
