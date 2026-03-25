@@ -19,11 +19,11 @@ func (c *Client) GetMergeBaseNext(base string, head string) (*MergeBaseNext, err
 		return nil, err
 	}
 
-	headCommit, err := gh.GetCommit(c.ctx, c.client, c.repo, head)
+	headSHA, err := gh.GetCommitSHA1(c.ctx, c.client, c.repo, head)
 	if err != nil {
 		return nil, err
 	}
-	headRepositoryCommit, err := findCommit(commitsComparison, headCommit.GetSHA())
+	headRepositoryCommit, err := findCommit(commitsComparison, headSHA)
 	if err != nil {
 		return &MergeBaseNext{
 			Commit: nil,
