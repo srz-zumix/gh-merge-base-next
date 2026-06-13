@@ -50,6 +50,15 @@ jobs:
           name: test-results
           path: test-results/
 
+      # https://docs.github.com/en/code-security/how-tos/maintain-quality-code/enable-code-quality
+      # GitHub Team か GitHub Enterprise が必要
+      - uses: actions/upload-code-coverage@v1
+        with:
+          file: coverage.xml
+          language: Go
+          label: coverage.out
+          fail-on-error: false
+
       - name: Run Octocov
         uses: k1LoW/octocov-action@b3b6ee60482a667950f87553abf1df63217235d9 # v1.5.1
         if: success() || failure()
