@@ -2,7 +2,7 @@ module github.com/srz-zumix/gh-merge-base-next
 
 go 1.26.1
 
-require github.com/srz-zumix/go-gh-extension v0.5.0
+require github.com/srz-zumix/go-gh-extension v0.5.2
 
 require (
 	charm.land/bubbles/v2 v2.1.0 // indirect
