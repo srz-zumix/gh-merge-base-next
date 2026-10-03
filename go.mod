@@ -2,9 +2,9 @@ module github.com/srz-zumix/gh-merge-base-next
 
 go 1.26.1
 
-require github.com/srz-zumix/go-gh-extension v0.6.14
+require github.com/srz-zumix/go-gh-extension v0.6.18
 
-require github.com/google/go-github/v90 v90.0.0 // indirect
+require github.com/google/go-github/v90 v90.0.0
 
 require (
 	charm.land/bubbles/v2 v2.1.1 // indirect
@@ -42,7 +42,7 @@ require (
 	github.com/fatih/color v1.19.0 // indirect
 	github.com/goccy/go-yaml v1.19.2 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.2 // indirect
-	github.com/google/go-github/v88 v88.0.0
+	github.com/google/go-github/v88 v88.0.0 // indirect
 	github.com/google/go-querystring v1.2.0 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -77,11 +77,11 @@ require (
 	github.com/stretchr/testify v1.12.0 // indirect
 	github.com/thlib/go-timezone-local v0.0.6 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
-	golang.org/x/crypto v0.55.0 // indirect
-	golang.org/x/sync v0.22.0 // indirect
-	golang.org/x/sys v0.47.0 // indirect
-	golang.org/x/term v0.45.0 // indirect
-	golang.org/x/text v0.41.0 // indirect
+	golang.org/x/crypto v0.57.0 // indirect
+	golang.org/x/sync v0.23.0 // indirect
+	golang.org/x/sys v0.48.0 // indirect
+	golang.org/x/term v0.46.0 // indirect
+	golang.org/x/text v0.42.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
